@@ -29,7 +29,6 @@ export class PayBillPage extends BasePage {
         this.verifyAccount = page.locator('input[name="verifyAccount"]');
         this.amount = page.locator('input[name="amount"]');
 
-        // ✅ FIXED: From Account is a <select>
         this.formAccount = page.locator('select[name="fromAccountId"]');
 
         this.sendPayment = page.locator('input[type="button"]');

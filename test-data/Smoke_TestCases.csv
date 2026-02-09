@@ -1,0 +1,2 @@
+run,testCaseId,testTag,requiresLogin,testFunction,testData
+Y,Verify_Transfer_Funds,@smoke,true,Verify_Transfer_Funds,MakeATransferData.csv

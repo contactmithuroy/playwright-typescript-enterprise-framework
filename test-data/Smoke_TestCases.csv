@@ -1,3 +1,3 @@
 run,testCaseId,testTag,requiresLogin,testFunction,testData
-N,Verify_Transfer_Funds,@smoke,true,Verify_Transfer_Funds,MakeATransferData.csv
+Y,Verify_Transfer_Funds,@smoke,true,Verify_Transfer_Funds,MakeATransferData.csv
 Y,Verify_PayBill,@smoke,true,Verify_PayBill,BillPayData.csv

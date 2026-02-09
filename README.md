@@ -87,6 +87,11 @@ Run specific test:
 ```
 npx playwright test tests/smoke/DynamicSmokeTestsAuto.spec.ts --grep "Verify_Transfer_Funds"
 ```
+## # Add New Test Case (Step-by-Step)
+Create New Test:
+- Open Guidline folder 
+- Open AdADD_NEW_TEST_CASE.md file 
+- Implement step by step
 
 ## Reports
 HTML report:

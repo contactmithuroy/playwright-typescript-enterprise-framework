@@ -23,14 +23,20 @@ export class LogInLogOutUserPage extends BasePage {
     await this.enterUsername(CommonFunctions.getUserName());
     await this.enterPassword(CommonFunctions.getPassword());
     await this.clickLoginButton();
-    await expect(this.page.locator('a[href*="logout.htm"]')).toBeVisible();
+    await expect(this.page.getByRole('link', { name: 'Log Out', exact: true })).toBeVisible();
   }
 
   async logOutUserPortal(): Promise<void> {
-    const logoutLink = this.page.locator('a[href*="logout.htm"]');
-    if (await logoutLink.isVisible()) {
-      await logoutLink.click();
+    if (this.page.isClosed()) return;
+    const logoutLink = this.page.getByRole('link', { name: 'Log Out' });
+    try {
+      if (await logoutLink.isVisible()) {
+        await logoutLink.click();
+      }
+      await expect(this.page.locator('input[value="Log In"]')).toBeVisible();
+    } catch (error) {
+      if (this.page.isClosed()) return;
+      throw error;
     }
-    await expect(this.page.locator('input[value="Log In"]')).toBeVisible();
   }
 }

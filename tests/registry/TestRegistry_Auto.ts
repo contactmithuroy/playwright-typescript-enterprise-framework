@@ -11,9 +11,10 @@ class TestRegistryClass {
   }
 
   async execute(testName: string, data?: Record<string, string>): Promise<void> {
-    const testFn = this.registry.get(testName);
+    const normalizedName = testName.trim();
+    const testFn = this.registry.get(normalizedName);
     if (!testFn) {
-      throw new Error(`Test "${testName}" not found in registry`);
+      throw new Error(`Test "${normalizedName}" not found in registry`);
     }
     await testFn(data);
   }
@@ -35,3 +36,27 @@ TestRegistry.register('Verify_Transfer_Funds', async () => {
   await transferPage!.submitTransfer();
   await transferPage!.verifyTransferSuccess();
 });
+
+const verifyPayBillTest = async () => {
+  const { mainNavigationPage, payBillPage } = pageObjects;
+  const testData = DataStore.getRow('BillPayData', 0);
+
+  await mainNavigationPage!.selectMenu('Bill Pay');
+  await payBillPage!.fillTransferDetails(
+    testData.payeeName,
+    testData.address,
+    testData.city,
+    testData.state,
+    testData.zipCode,
+    testData.phoneNumber,
+    testData.accountNumber,
+    testData.amount,
+    testData.fromAccount,
+  );
+
+  await payBillPage!.sendPaymentBill();
+  await payBillPage!.verifyPayBillSuccess();
+};
+
+TestRegistry.register('Verify_PayBill', verifyPayBillTest);
+TestRegistry.register('Verify_Pay_Bill', verifyPayBillTest);

@@ -2,11 +2,13 @@ import { test as base, type Page } from '@playwright/test';
 import { LogInLogOutUserPage } from '../pages/Common/LoginLogout.page';
 import { MainNavigationPage } from '../pages/Common/MainNavigationPage';
 import { MakeATransferPage } from '../pages/MainPages/MakeATransfer.page';
+import { PayBillPage } from '../pages/MainPages/PayBill.page';
 
 export type TestFixtures = {
   loginPage: LogInLogOutUserPage;
   mainNavigationPage: MainNavigationPage;
   transferPage: MakeATransferPage;
+  payBillPage: PayBillPage;
   _autoInit: void;
 };
 
@@ -19,9 +21,11 @@ export const pageObjects = {
   loginPage: null as LogInLogOutUserPage | null,
   mainNavigationPage: null as MainNavigationPage | null,
   transferPage: null as MakeATransferPage | null,
+  payBillPage: null as PayBillPage | null,
   _originalLoginPage: null as LogInLogOutUserPage | null,
   _originalMainNavigationPage: null as MainNavigationPage | null,
   _originalTransferPage: null as MakeATransferPage | null,
+  _originalPayBillPage: null as PayBillPage | null,
 
 };
 
@@ -47,6 +51,13 @@ export const test = base.extend<TestOptions & TestFixtures>({
     await use(transferPage);
   },
 
+  payBillPage: async ({ page }, use) => {
+    const payBillPage = new PayBillPage(page);
+    pageObjects._originalPayBillPage = payBillPage;
+    pageObjects.payBillPage = payBillPage;
+    await use(payBillPage);
+  },
+
   _autoInit: [
     async (
       {
@@ -54,6 +65,7 @@ export const test = base.extend<TestOptions & TestFixtures>({
         loginPage,
         mainNavigationPage,
         transferPage,
+        payBillPage,
       },
       use
     ) => {

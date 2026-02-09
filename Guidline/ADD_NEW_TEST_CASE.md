@@ -24,7 +24,32 @@ export class NewFeaturePage extends BasePage {
 }
 ```
 
-## 2) Register the Test in Registry
+## 2) Add a Base Hook (Fixture)
+**File:** `tests/base-hooks.ts`
+
+If you add a new page object, register it as a fixture and expose it in `pageObjects`:
+```ts
+export type TestFixtures = {
+  // ...
+  newFeaturePage: NewFeaturePage;
+};
+
+export const pageObjects = {
+  // ...
+  newFeaturePage: null as NewFeaturePage | null,
+};
+
+export const test = base.extend<TestOptions & TestFixtures>({
+  // ...
+  newFeaturePage: async ({ page }, use) => {
+    const newFeaturePage = new NewFeaturePage(page);
+    pageObjects.newFeaturePage = newFeaturePage;
+    await use(newFeaturePage);
+  },
+});
+```
+
+## 3) Register the Test in Registry
 **File:** `tests/registry/TestRegistry_Auto.ts`
 
 Add a new `TestRegistry.register(...)` block:
@@ -38,7 +63,7 @@ TestRegistry.register('Verify_New_Feature', async () => {
 });
 ```
 
-## 3) Add Data File (CSV)
+## 4) Add Data File (CSV)
 **Folder:** `test-data/`
 
 Create a new CSV for the test data:
@@ -52,7 +77,7 @@ field1,field2
 value1,value2
 ```
 
-## 4) Map the CSV in DataStore
+## 5) Map the CSV in DataStore
 **File:** `data-models/dataStore.ts`
 
 Add your CSV to the `store` map and types:
@@ -65,7 +90,7 @@ const store = {
 
 Update type union for `getAll/getRow/getCell` to include `NewFeatureData`.
 
-## 5) Add Test Control Row
+## 6) Add Test Control Row
 **File:** `test-data/Smoke_TestCases.csv`
 
 Add a row:
@@ -73,7 +98,7 @@ Add a row:
 Y,Verify_New_Feature,@smoke,true,Verify_New_Feature,NewFeatureData.csv
 ```
 
-## 6) Run the Test
+## 7) Run the Test
 ```
 npx playwright test tests/smoke/DynamicSmokeTestsAuto.spec.ts --grep "Verify_New_Feature"
 ```
